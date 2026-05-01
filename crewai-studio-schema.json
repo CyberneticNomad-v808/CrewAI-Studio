@@ -1,0 +1,278 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://crewai-studio.local/schemas/crew-export.json",
+  "title": "CrewAI Studio Crew Export Schema",
+  "description": "JSON Schema for CrewAI Studio crew import/export format",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "process",
+    "verbose",
+    "memory",
+    "cache",
+    "planning",
+    "max_rpm",
+    "created_at",
+    "agents",
+    "tasks",
+    "tools"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the crew",
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name for the crew",
+      "minLength": 1
+    },
+    "process": {
+      "type": "string",
+      "description": "Crew execution process type",
+      "enum": ["sequential", "hierarchical"]
+    },
+    "verbose": {
+      "type": "boolean",
+      "description": "Enable verbose output during crew execution"
+    },
+    "memory": {
+      "type": "boolean",
+      "description": "Enable crew memory capabilities"
+    },
+    "cache": {
+      "type": "boolean",
+      "description": "Enable caching for crew operations"
+    },
+    "planning": {
+      "type": "boolean",
+      "description": "Enable planning phase before execution"
+    },
+    "planning_llm": {
+      "type": ["string", "null"],
+      "description": "LLM to use for planning (e.g., 'ollama/llama3.1:70b')"
+    },
+    "max_rpm": {
+      "type": ["integer", "null"],
+      "description": "Maximum requests per minute",
+      "minimum": 0
+    },
+    "manager_llm": {
+      "type": ["string", "null"],
+      "description": "LLM to use for manager agent in hierarchical process"
+    },
+    "manager_agent": {
+      "type": ["string", "null"],
+      "description": "Agent ID to use as manager in hierarchical process"
+    },
+    "created_at": {
+      "type": "string",
+      "description": "ISO 8601 timestamp of crew creation",
+      "format": "date-time"
+    },
+    "agents": {
+      "type": "array",
+      "description": "Array of agents in the crew",
+      "items": {
+        "$ref": "#/definitions/agent"
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "description": "Array of tasks for the crew",
+      "items": {
+        "$ref": "#/definitions/task"
+      }
+    },
+    "tools": {
+      "type": "array",
+      "description": "Array of tools available to agents",
+      "items": {
+        "$ref": "#/definitions/tool"
+      }
+    }
+  },
+  "definitions": {
+    "tool": {
+      "type": "object",
+      "description": "A tool that can be used by agents",
+      "required": ["tool_id", "name", "description", "parameters"],
+      "properties": {
+        "tool_id": {
+          "type": "string",
+          "description": "Unique identifier for the tool",
+          "pattern": "^tool_[A-Za-z0-9_-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Tool class name",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of tool functionality",
+          "minLength": 1
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Tool-specific configuration parameters",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "agent": {
+      "type": "object",
+      "description": "An agent that performs tasks",
+      "required": [
+        "id",
+        "role",
+        "goal",
+        "backstory",
+        "verbose",
+        "allow_delegation",
+        "llm_provider_model",
+        "max_iter",
+        "tool_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the agent",
+          "pattern": "^agent_[A-Za-z0-9_-]+$"
+        },
+        "role": {
+          "type": "string",
+          "description": "Agent's role or job title",
+          "minLength": 1
+        },
+        "goal": {
+          "type": "string",
+          "description": "Agent's primary goal or objective",
+          "minLength": 1
+        },
+        "backstory": {
+          "type": "string",
+          "description": "Agent's background and expertise",
+          "minLength": 1
+        },
+        "verbose": {
+          "type": "boolean",
+          "description": "Enable verbose output for this agent"
+        },
+        "allow_delegation": {
+          "type": "boolean",
+          "description": "Allow agent to delegate tasks to other agents"
+        },
+        "cache": {
+          "type": "boolean",
+          "description": "Enable caching for agent operations",
+          "default": true
+        },
+        "llm_provider_model": {
+          "type": "string",
+          "description": "LLM provider and model (e.g., 'ollama/llama3.1:70b', 'OpenAI: gpt-4')",
+          "minLength": 1
+        },
+        "temperature": {
+          "type": "number",
+          "description": "LLM temperature for response randomness",
+          "minimum": 0.0,
+          "maximum": 2.0,
+          "default": 0.7
+        },
+        "max_iter": {
+          "type": "integer",
+          "description": "Maximum iterations for agent task execution",
+          "minimum": 1,
+          "default": 25
+        },
+        "max_rpm": {
+          "type": ["integer", "null"],
+          "description": "DEPRECATED: Use crew-level max_rpm instead",
+          "minimum": 0
+        },
+        "tool_ids": {
+          "type": "array",
+          "description": "Array of tool IDs available to this agent",
+          "items": {
+            "type": "string",
+            "pattern": "^tool_[A-Za-z0-9_-]+$"
+          },
+          "uniqueItems": true
+        },
+        "created_at": {
+          "type": "string",
+          "description": "ISO 8601 timestamp of agent creation",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    },
+    "task": {
+      "type": "object",
+      "description": "A task to be performed by an agent",
+      "required": [
+        "id",
+        "description",
+        "expected_output",
+        "async_execution",
+        "agent_id",
+        "created_at"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the task",
+          "pattern": "^task_[A-Za-z0-9_-]+$"
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed task description with objectives and requirements",
+          "minLength": 1
+        },
+        "expected_output": {
+          "type": "string",
+          "description": "Expected output or deliverable from the task",
+          "minLength": 1
+        },
+        "async_execution": {
+          "type": "boolean",
+          "description": "Execute task asynchronously (parallel execution)",
+          "default": false
+        },
+        "agent_id": {
+          "type": "string",
+          "description": "ID of the agent assigned to this task",
+          "pattern": "^agent_[A-Za-z0-9_-]+$"
+        },
+        "context_from_async_tasks_ids": {
+          "type": ["array", "null"],
+          "description": "Array of async task IDs whose outputs are needed as context",
+          "items": {
+            "type": "string",
+            "pattern": "^task_[A-Za-z0-9_-]+$"
+          },
+          "uniqueItems": true
+        },
+        "context_from_sync_tasks_ids": {
+          "type": ["array", "null"],
+          "description": "Array of sync task IDs whose outputs are needed as context",
+          "items": {
+            "type": "string",
+            "pattern": "^task_[A-Za-z0-9_-]+$"
+          },
+          "uniqueItems": true
+        },
+        "created_at": {
+          "type": "string",
+          "description": "ISO 8601 timestamp of task creation",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

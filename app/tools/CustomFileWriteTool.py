@@ -15,13 +15,13 @@ class CustomFileWriteToolInputSchema(FixedCustomFileWriteToolInputSchema):
 class CustomFileWriteTool(BaseTool):
     name: str = "Write File"
     description: str = "Tool to write or append to files"
-    args_schema = CustomFileWriteToolInputSchema
+    args_schema: type[BaseModel] = CustomFileWriteToolInputSchema
     filename: Optional[str] = None
 
     def __init__(self, base_folder: str, filename: Optional[str] = None, **kwargs):
         super().__init__(**kwargs)
         if filename is not None and len(filename) > 0:
-            self.args_schema = FixedCustomFileWriteToolInputSchema
+            self.args_schema: type[BaseModel] = FixedCustomFileWriteToolInputSchema
         self._base_folder = base_folder
         self.filename = filename or None
         self._ensure_base_folder_exists()

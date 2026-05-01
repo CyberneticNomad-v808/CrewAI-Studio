@@ -40,11 +40,21 @@ def draw_sidebar():
 
         if 'page' not in ss:
             ss.page = 'Crews'
-        
+
         selected_page = st.radio('Page', list(pages().keys()), index=list(pages().keys()).index(ss.page),label_visibility="collapsed")
         if selected_page != ss.page:
             ss.page = selected_page
             st.rerun()
+
+        # Footer with version info
+        try:
+            import crewai
+            version = crewai.__version__
+        except (ImportError, AttributeError):
+            version = "unknown"
+
+        st.divider()
+        st.caption(f"CrewAI v{version}")
             
 def main():
     st.set_page_config(page_title="CrewAI Studio", page_icon="img/favicon.ico", layout="wide")

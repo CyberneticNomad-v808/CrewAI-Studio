@@ -1,180 +1,149 @@
-# CrewAI Studio
+# CrewAI Studio JSON Schema
 
-Welcome to CrewAI Studio! This application provides a user-friendly interface written in Streamlit for interacting with CrewAI, suitable even for those who don't want to write any code. Follow the steps below to install and run the application using Docker/docker-compose or Conda/venv.
+Official JSON Schema and validation tools for CrewAI Studio crew configurations.
 
-## Features
+## Quick Start
 
-- **Multi-platform support**: Works on Windows, Linux and MacOS.
-- **No coding required**: User-friendly interface for interacting with CrewAI.
-- **Conda and virtual environment support**: Choose between Conda and a Python virtual environment for installation.
-- **Results history**: You can view previous results.
-- **Knowledge sources**: You can add knowledge sources for your crews
-- **CrewAI tools** You can use crewai tools to interact with real world. ~~Crewai studio uses a forked version of crewai-tools with some bugfixes and enhancements (https://github.com/strnad/crewAI-tools)~~ (bugfixes already merged to crewai-tools)
-- **Custom Tools** Custom tools for calling APIs, writing files, enhanced code interpreter, enhanced web scraper... More will be added soon
-- **LLM providers supported**: Currently OpenAI, Groq, Anthropic, ollama, Grok and LM Studio backends are supported. OpenAI key is probably still needed for embeddings in many tools. Don't forget to load an embedding model when using LM Studio.
-- **Single Page app export**: Feature to export crew as simple single page streamlit app.
-- **Threaded crew run**: Crews can run in background and can be stopped.
+```bash
+# Validate your JSON file
+python3 validate-crew-json.py your-crew.json
 
-## Support CrewAI Studio
+# View the schema
+cat crewai-studio-schema.json
+```
 
-Your support helps fund the development and growth of our project. Every contribution is greatly appreciated!
+## Files
 
-### Donate with Bitcoin
-bc1qgsn45g02wran4lph5gsyqtk0k7t98zsg6qur0y
+| File | Purpose |
+|------|---------|
+| `crewai-studio-schema.json` | Official JSON Schema (Draft 07) |
+| `validate-crew-json.py` | Validation tool |
+| `CREW_JSON_FORMAT.md` | Complete format specification |
 
-### Sponsor via GitHub
-[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-GitHub-ff69b4?style=for-the-badge&logo=github)](https://github.com/sponsors/strnad)
+## JSON Structure
 
+A CrewAI Studio crew configuration includes:
 
-## Screenshots
+- **Crew metadata** - ID, name, process type, settings
+- **Tools** - Reusable tools available to agents
+- **Agents** - AI agents with roles and capabilities
+- **Tasks** - Work items assigned to agents
 
-<img src="https://raw.githubusercontent.com/strnad/CrewAI-Studio/main/img/ss1.png" alt="crews definition" style="width:50%;"/><img src="https://raw.githubusercontent.com/strnad/CrewAI-Studio/main/img/ss2.png" alt="kickoff" style="width:50%;"/>
-<img src="https://raw.githubusercontent.com/strnad/CrewAI-Studio/main/img/ss3.png" alt="kickoff" style="width:50%;"/><img src="https://raw.githubusercontent.com/strnad/CrewAI-Studio/main/img/ss4.png" alt="kickoff" style="width:50%;"/>
-<img src="https://raw.githubusercontent.com/strnad/CrewAI-Studio/main/img/ss5.png" alt="kickoff" style="width:50%;"/><img src="https://raw.githubusercontent.com/strnad/CrewAI-Studio/main/img/ss6.png" alt="kickoff" style="width:50%;"/>
+### Minimal Example
+
+```json
+{
+  "id": "C_my_crew",
+  "name": "My Crew",
+  "process": "sequential",
+  "verbose": true,
+  "memory": false,
+  "cache": true,
+  "planning": false,
+  "planning_llm": null,
+  "max_rpm": 1000,
+  "manager_llm": null,
+  "manager_agent": null,
+  "created_at": "2025-10-12T00:00:00.000000",
+  "tools": [],
+  "agents": [],
+  "tasks": []
+}
+```
+
+## Key Requirements
+
+### ID Patterns
+
+All IDs must follow specific patterns:
+
+```
+Tools:  tool_[name]    → tool_file_read
+Agents: agent_[name]   → agent_python_developer
+Tasks:  task_[name]    → task_implement_feature
+```
+
+### Required Fields
+
+**Tool:**
+- `tool_id`, `name`, `description`, `parameters`
+
+**Agent:**
+- `id`, `role`, `goal`, `backstory`, `verbose`, `allow_delegation`
+- `cache`, `llm_provider_model`, `temperature`, `max_iter`, `tool_ids`
+
+**Task:**
+- `id`, `description`, `expected_output`, `async_execution`, `agent_id`
+- `context_from_async_tasks_ids`, `context_from_sync_tasks_ids`, `created_at`
+
+### LLM Formats
+
+```
+Ollama:    "ollama/llama3.1:70b"
+OpenAI:    "OpenAI: gpt-4"
+Groq:      "Groq: llama-3.1-70b-versatile"
+Anthropic: "Anthropic: claude-3-opus-20240229"
+```
+
+## Validation
+
+```bash
+python3 validate-crew-json.py your-crew.json
+```
+
+### Success
+
+```
+✅ VALIDATION PASSED!
+
+📊 Summary:
+  - Crew ID: C_my_crew
+  - Crew Name: My Crew
+  - Process: sequential
+  - Tools: 5
+  - Agents: 3
+  - Tasks: 10
+```
+
+### Failure
+
+```
+❌ VALIDATION FAILED!
+
+Error at: agents -> 0
+Message: 'llm_provider_model' is a required property
+```
+
+## Documentation
+
+See `CREW_JSON_FORMAT.md` for:
+- Complete field specifications
+- Detailed examples
+- Naming conventions
+- Best practices
+
+## Examples
+
+Working examples are available:
+- `crewai-migration-crew-atomic-fixed.json` (60 tasks)
+- `crewai-migration-crew-fixed.json` (445 tasks)
 
 ## Installation
 
-### Using Virtual Environment
+```bash
+# Install validation dependency
+pip install jsonschema
 
-**For Virtual Environment**: Ensure you have Python installed. If you dont have python instaled, you can simply use the conda installer.
-
-#### On Linux or MacOS
-
-1. **Clone the repository (or use downloaded ZIP file)**:
-
-   ```bash
-   git clone https://github.com/strnad/CrewAI-Studio.git
-   cd CrewAI-Studio
-   ```
-
-2. **Run the installation script**:
-
-   ```bash
-   ./install_venv.sh
-   ```
-
-3. **Run the application**:
-   ```bash
-   ./run_venv.sh
-   ```
-
-#### On Windows
-
-1. **Clone the repository (or use downloaded ZIP file)**:
-
-   ```powershell
-   git clone https://github.com/strnad/CrewAI-Studio.git
-   cd CrewAI-Studio
-   ```
-
-2. **Run the Conda installation script**:
-
-   ```powershell
-   ./install_venv.bat
-   ```
-
-3. **Run the application**:
-   ```powershell
-   ./run_venv.bat
-   ```
-
-### Using Conda
-
-Conda will be installed locally in the project folder. No need for a pre-existing Conda installation.
-
-#### On Linux
-
-1. **Clone the repository (or use downloaded ZIP file)**:
-
-   ```bash
-   git clone https://github.com/strnad/CrewAI-Studio.git
-   cd CrewAI-Studio
-   ```
-
-2. **Run the Conda installation script**:
-
-   ```bash
-   ./install_conda.sh
-   ```
-
-3. **Run the application**:
-   ```bash
-   ./run_conda.sh
-   ```
-
-#### On Windows
-
-1. **Clone the repository (or use downloaded ZIP file)**:
-
-   ```powershell
-   git clone https://github.com/strnad/CrewAI-Studio.git
-   cd CrewAI-Studio
-   ```
-
-2. **Run the Conda installation script**:
-
-   ```powershell
-   ./install_conda.bat
-   ```
-
-3. **Run the application**:
-   ```powershell
-   ./run_conda.bat
-   ```
-
-### One-Click Deployment
-
-[![Deploy to RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/?app_id=318)
-
-## Running with Docker Compose
-
-To quickly set up and run CrewAI-Studio using Docker Compose, follow these steps:
-
-### Prerequisites
-
-- Ensure [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) are installed on your system.
-
-### Steps
-
-1. Clone the repository:
-```
-git clone https://github.com/strnad/CrewAI-Studio.git
-cd CrewAI-Studio
+# Make validator executable
+chmod +x validate-crew-json.py
 ```
 
-2. Create a .env file for configuration.  Edit for your own configuration:
-```
-cp .env_example .env
-```
+## Schema Version
 
-3. Start the application with Docker Compose:
-```
-docker-compose up --build
-```
+**Version:** 1.0
+**Standard:** JSON Schema Draft 07
+**Updated:** 2025-10-12
 
-4. Access the application: http://localhost:8501
+---
 
-## Configuration
-
-Before running the application, ensure you update the `.env` file with your API keys and other necessary configurations. An example `.env` file is provided for reference.
-
-## Troubleshooting
-In case of problems:
-- Delete the `venv/miniconda` folder and reinstall `crewai-studio`.
-- Rename `crewai.db` (it contains your crews but sometimes new versions can break compatibility).
-- Raise an issue and I will help you.
-
-## Video tutorial
-Video tutorial on CrewAI Studio made by Josh Poco
-
-[![FREE CrewAI Studio GUI EASY AI Agent Creation!🤖 Open Source AI Agent Orchestration Self Hosted](https://img.youtube.com/vi/3Uxdggt88pY/hqdefault.jpg)](https://www.youtube.com/watch?v=3Uxdggt88pY)
-
-## Star History
-
-<a href="https://star-history.com/#strnad/CrewAI-Studio&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=strnad/CrewAI-Studio&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=strnad/CrewAI-Studio&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=strnad/CrewAI-Studio&type=Date" />
- </picture>   
-</a>
+For detailed format specification, see **CREW_JSON_FORMAT.md**

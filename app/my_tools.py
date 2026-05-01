@@ -2,7 +2,7 @@ import streamlit as st
 import os
 from utils import rnd_id
 from crewai_tools import CodeInterpreterTool,ScrapeElementFromWebsiteTool,TXTSearchTool,SeleniumScrapingTool,PGSearchTool,PDFSearchTool,MDXSearchTool,JSONSearchTool,GithubSearchTool,EXASearchTool,DOCXSearchTool,CSVSearchTool,ScrapeWebsiteTool, FileReadTool, DirectorySearchTool, DirectoryReadTool, CodeDocsSearchTool, YoutubeVideoSearchTool,SerperDevTool,YoutubeChannelSearchTool,WebsiteSearchTool
-from tools.CSVSearchToolEnhanced import CSVSearchToolEnhanced
+# REMOVED: CSVSearchToolEnhanced (obsolete embedchain dependency) - use built-in CSVSearchTool instead
 from tools.CustomApiTool import CustomApiTool
 from tools.CustomCodeInterpreterTool import CustomCodeInterpreterTool
 from tools.CustomFileWriteTool import CustomFileWriteTool
@@ -353,16 +353,9 @@ class MyCustomCodeInterpreterTool(MyTool):
     def create_tool(self) -> CustomCodeInterpreterTool:
         return CustomCodeInterpreterTool(workspace_dir=self.parameters.get('workspace_dir') if self.parameters.get('workspace_dir') else "workspace")
 
-class MyCSVSearchToolEnhanced(MyTool):
-    def __init__(self, tool_id=None, csv=None):
-        parameters = {
-            'csv': {'mandatory': False}
-        }
-        super().__init__(tool_id, 'CSVSearchToolEnhanced', "A tool that can be used to semantic search a query from a CSV's content.", parameters, csv=csv)
+# REMOVED: MyCSVSearchToolEnhanced class - obsolete embedchain dependency
+# Use built-in MyCSVSearchTool instead (lines 139-147)
 
-    def create_tool(self) -> CSVSearchToolEnhanced:
-        return CSVSearchToolEnhanced(csv=self.parameters.get('csv') if self.parameters.get('csv') else None)
-    
 class MyScrapeWebsiteToolEnhanced(MyTool):
     def __init__(self, tool_id=None, website_url=None, cookies=None, show_urls=None, css_selector=None):
         parameters = {
@@ -423,7 +416,7 @@ TOOL_CLASSES = {
 
     'TXTSearchTool': MyTXTSearchTool,
     'CSVSearchTool': MyCSVSearchTool,
-    'CSVSearchToolEnhanced': MyCSVSearchToolEnhanced,
+    # REMOVED: 'CSVSearchToolEnhanced' - obsolete embedchain dependency
     'DOCXSearchTool': MyDocxSearchTool, 
     'EXASearchTool': MyEXASearchTool,
     'JSONSearchTool': MyJSONSearchTool,

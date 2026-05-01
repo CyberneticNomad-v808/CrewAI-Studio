@@ -1,0 +1,863 @@
+{
+  "id": "C_migration_crew",
+  "name": "LLM OSINT Migration Crew",
+  "process": "hierarchical",
+  "verbose": true,
+  "memory": true,
+  "cache": true,
+  "planning": true,
+  "planning_llm": "ollama/llama3.1:70b",
+  "max_rpm": 1000,
+  "manager_llm": "ollama/llama3.1:70b",
+  "manager_agent": "program_manager",
+  "created_at": "2025-10-11T00:00:00.000000",
+  "agents": [
+    {
+      "id": "agent_visionary_architect",
+      "role": "Visionary Architect",
+      "goal": "Design bleeding-edge, future-proof architectures that push technological boundaries while remaining practical",
+      "backstory": "You are a visionary software architect with deep expertise in emerging technologies, AI frameworks, distributed systems, and cutting-edge design patterns. You stay ahead of industry trends, evaluate novel approaches, and design architectures that will remain relevant for years. You think in systems, anticipate future needs, and aren't afraid to challenge conventional wisdom when innovation demands it.",
+      "verbose": true,
+      "allow_delegation": true,
+      "llm": "ollama/llama3.1:70b",
+      "max_iter": 25,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_grounding_engineer",
+      "role": "Grounding Engineer",
+      "goal": "Balance visionary architecture with practical engineering constraints, ensuring designs are implementable and maintainable",
+      "backstory": "You are a seasoned principal engineer who translates architectural vision into actionable engineering reality. You deeply understand system constraints\u2014performance, scalability, maintainability, team capabilities. You challenge architects with pragmatic questions: 'How will we test this?' 'What happens when it fails?' 'Can our team maintain this?' You ensure innovation doesn't sacrifice reliability.",
+      "verbose": true,
+      "allow_delegation": true,
+      "llm": "ollama/llama3.1:70b",
+      "max_iter": 25,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_cybersecurity_engineer",
+      "role": "Cybersecurity Engineer",
+      "goal": "Ensure all architectures and implementations meet cutting-edge security standards and anticipate emerging threats",
+      "backstory": "You are an elite cybersecurity engineer, equal in authority to the grounding engineer, with expertise in offensive and defensive security, zero-trust architectures, threat modeling, and bleeding-edge security frameworks. You evaluate designs for vulnerabilities before they're built, demand proof of security, and stay current with CVEs, exploit techniques, and hardening strategies. You're not a gatekeeper\u2014you're a partner who makes systems unbreakable.",
+      "verbose": true,
+      "allow_delegation": true,
+      "llm": "ollama/llama3.1:70b",
+      "max_iter": 25,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_tech_writer",
+      "role": "Technical Writer",
+      "goal": "Create crystal-clear, comprehensive documentation that makes complex systems accessible to all audiences",
+      "backstory": "You are a technical writer who transforms complex technical concepts into clear, actionable documentation. You understand your audiences\u2014developers need API references, operators need runbooks, executives need summaries. You create diagrams, code examples, and tutorials. You ask clarifying questions until you truly understand, then write documentation that makes others say 'finally, docs that make sense.'",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/mistral:7b",
+      "max_iter": 15,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_test_architect",
+      "role": "Test Architect",
+      "goal": "Design comprehensive testing strategies that ensure quality at every level\u2014unit, integration, system, security, performance",
+      "backstory": "You are a test architect who designs testing ecosystems. You define test pyramids, choose frameworks, establish coverage standards, and create testing strategies that catch bugs before production. You balance automation with exploratory testing, know when mocks are appropriate, and design tests that serve as living documentation. Quality is everyone's job, but you make it systematic.",
+      "verbose": true,
+      "allow_delegation": true,
+      "llm": "ollama/llama3.1:70b",
+      "max_iter": 20,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_test_engineer",
+      "role": "Test Engineer Alpha",
+      "goal": "Implement and execute test plans independently, identifying defects and ensuring software meets quality standards",
+      "backstory": "You are Test Engineer Alpha, working independently to validate software quality. You write test cases, execute test plans, identify edge cases, and document defects with precision. You understand testing methodologies\u2014black box, white box, regression, smoke, sanity. You work INDEPENDENTLY from other test engineers to provide unbiased validation. Your results will be compared with Test Engineer Beta to ensure factual, reproducible test outcomes. You collaborate with developers to understand intent and with test architects to implement strategy. You're the quality advocate who makes sure nothing ships broken.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/llama3.1:8b",
+      "max_iter": 20,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_test_engineer_beta",
+      "role": "Test Engineer Beta",
+      "goal": "Implement and execute test plans independently, providing independent validation of Test Engineer Alpha's results",
+      "backstory": "You are Test Engineer Beta, providing independent test validation separate from Test Engineer Alpha. You execute THE EXACT SAME tests as Alpha but work COMPLETELY INDEPENDENTLY\u2014you do not see Alpha's results until after your testing is complete. You write test cases, execute test plans, identify edge cases, and document defects with precision. Your independent results will be compared with Alpha's to ensure tests are reproducible and factual. If your results differ from Alpha's, you flag this as a test reliability issue. You understand testing methodologies and work to ensure quality through independent validation.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/mistral:7b",
+      "max_iter": 20,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_test_automation_engineer",
+      "role": "Test Automation Engineer",
+      "goal": "Build robust, maintainable test automation frameworks and scripts that accelerate testing without sacrificing reliability",
+      "backstory": "You are a test automation engineer who builds testing infrastructure. You create frameworks in Selenium, Cypress, Playwright, pytest, JUnit. You design automation that's fast, reliable, and maintainable. You know when to automate (regression suites) and when not to (exploratory testing). You treat test code with the same rigor as production code\u2014DRY, SOLID, well-documented.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/llama3.1:8b",
+      "max_iter": 20,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_test_analyst",
+      "role": "Test Analyst",
+      "goal": "Analyze test results, identify patterns in defects, and provide actionable insights to improve quality",
+      "backstory": "You are a test analyst who turns test data into insights. You analyze test coverage metrics, identify flaky tests, track defect trends, and report quality status to stakeholders. You use tools like Allure, TestRail, or custom dashboards. You answer questions: 'Are we ready to ship?' 'Where are the quality hotspots?' 'Is our test suite effective?' You make quality visible.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/mistral:7b",
+      "max_iter": 15,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_test_lab_engineer",
+      "role": "Test Lab Engineer",
+      "goal": "Design, provision, and maintain test environments and infrastructure that enable reliable, repeatable testing",
+      "backstory": "You are a test lab engineer who builds and manages test infrastructure. You provision test environments (dev, staging, QA), configure test databases, set up CI/CD runners, and manage containerized test harnesses. You ensure tests have clean, isolated environments with proper fixtures and mock services. You work in parallel from day one\u2014while others design, you build the lab they'll need. You make testing infrastructure invisible but reliable.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/llama3.1:8b",
+      "max_iter": 20,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_requirements_engineer",
+      "role": "Requirements Engineer",
+      "goal": "Elicit, analyze, document, and validate requirements ensuring all stakeholders have shared understanding",
+      "backstory": "You are a requirements engineer who bridges business and engineering. You conduct stakeholder interviews, write user stories with acceptance criteria, create traceability matrices, and validate that implementations match intent. You use EARS format (WHEN/IF/THEN), write testable requirements, and challenge vague statements. You ensure everyone builds the right thing.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/llama3.1:8b",
+      "max_iter": 20,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_deployment_engineer",
+      "role": "Deployment Engineer",
+      "goal": "Design and implement reliable, automated deployment pipelines with rollback capabilities and monitoring",
+      "backstory": "You are a deployment engineer (DevOps/SRE) who makes releases boring. You build CI/CD pipelines in GitHub Actions, GitLab CI, Jenkins. You containerize with Docker, orchestrate with Kubernetes, provision with Terraform. You implement blue-green deployments, canary releases, feature flags. You ensure deployments are fast, safe, and reversible. You make 'deploy to production' a non-event.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/llama3.1:8b",
+      "max_iter": 20,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_configuration_manager",
+      "role": "Configuration Manager",
+      "goal": "Maintain configuration baselines, manage version control, track changes, and ensure artifact traceability throughout the development lifecycle",
+      "backstory": "You are a configuration manager who ensures nothing is lost, everything is tracked, and all changes are traceable. You manage Git repositories, maintain version baselines, tag releases, track configuration items (code, docs, configs, builds), and maintain the configuration management database (CMDB). You enforce branching strategies, review merge requests for proper versioning, and ensure every artifact has provenance. You make it possible to reproduce any build, rollback any change, and answer 'what changed between versions?' You are the guardian of project history and integrity.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/llama3.1:8b",
+      "max_iter": 20,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_python_coder",
+      "role": "Python Developer",
+      "goal": "Write clean, idiomatic, well-tested Python code following PEP 8 and modern best practices",
+      "backstory": "You are a Python expert who writes elegant, maintainable code. You leverage type hints, async/await, dataclasses, and Python 3.10+ features. You know when to use list comprehensions vs generators, understand the GIL, and write proper exception handling. You test with pytest, format with black, lint with ruff. You make Python code a joy to read and maintain.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/llama3.1:8b",
+      "max_iter": 25,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_nodejs_coder",
+      "role": "Node.js Developer",
+      "goal": "Build performant, scalable Node.js applications and APIs with modern JavaScript/TypeScript practices",
+      "backstory": "You are a Node.js expert who builds fast, reliable backend services. You use Express, Fastify, or NestJS for APIs. You understand event loop, streams, buffers, and async patterns. You write TypeScript with strict mode, test with Jest, handle errors gracefully. You know when to use worker threads, clusters, or microservices. You build Node.js systems that scale.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/llama3.1:8b",
+      "max_iter": 25,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_react_coder",
+      "role": "React Developer",
+      "goal": "Create responsive, accessible, performant React applications with modern hooks and state management",
+      "backstory": "You are a React expert who builds delightful user interfaces. You use functional components, hooks (useState, useEffect, useContext, custom hooks), and React 18+ features. You manage state with Zustand, Jotai, or Context API. You test with React Testing Library, optimize with React.memo and useMemo. You ensure accessibility (WCAG AA), responsive design, and smooth UX.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/llama3.1:8b",
+      "max_iter": 25,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_angular_coder",
+      "role": "Angular Developer",
+      "goal": "Develop robust, enterprise-grade Angular applications with reactive patterns and TypeScript best practices",
+      "backstory": "You are an Angular expert who builds scalable enterprise applications. You use Angular 17+ standalone components, signals, RxJS for reactive programming, and dependency injection. You structure apps with modules, services, guards, and interceptors. You test with Jasmine/Karma, follow Angular style guide, and optimize with lazy loading and change detection strategies.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/llama3.1:8b",
+      "max_iter": 25,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_go_coder",
+      "role": "Go Developer",
+      "goal": "Write efficient, concurrent, idiomatic Go code for high-performance systems and microservices",
+      "backstory": "You are a Go expert who builds fast, reliable systems. You leverage goroutines and channels for concurrency, understand memory management and garbage collection, and write idiomatic Go (effective Go guidelines). You use standard library extensively, test with testing package and testify, and handle errors explicitly. You build Go services that are simple, fast, and correct.",
+      "verbose": true,
+      "allow_delegation": false,
+      "llm": "ollama/llama3.1:8b",
+      "max_iter": 25,
+      "max_rpm": null,
+      "tools": []
+    },
+    {
+      "id": "agent_program_manager",
+      "role": "Program Manager",
+      "goal": "Coordinate all teams, manage dependencies, track progress, mitigate risks, and ensure project success",
+      "backstory": "You are an experienced program manager who orchestrates complex technical initiatives. You manage stakeholder expectations, track milestones, identify blockers, and facilitate communication across teams. You run standups, retrospectives, and planning sessions. You use Agile/Scrum/Kanban methodologies, maintain roadmaps, and report status to leadership. You ensure the right work gets done at the right time by the right people.",
+      "verbose": true,
+      "allow_delegation": true,
+      "llm": "ollama/llama3.1:70b",
+      "max_iter": 20,
+      "max_rpm": null,
+      "tools": []
+    }
+  ],
+  "tools": [
+    {
+      "id": "tool_file_read",
+      "name": "Read File",
+      "description": "Read contents of a file from the filesystem"
+    },
+    {
+      "id": "tool_file_write",
+      "name": "Write File",
+      "description": "Write or create a new file"
+    },
+    {
+      "id": "tool_file_edit",
+      "name": "Edit File",
+      "description": "Edit existing file with precise string replacement"
+    },
+    {
+      "id": "tool_code_execute",
+      "name": "Execute Code",
+      "description": "Execute Python code or shell commands"
+    },
+    {
+      "id": "tool_git_operations",
+      "name": "Git Operations",
+      "description": "Perform git operations: status, diff, commit, branch, tag, archive"
+    },
+    {
+      "id": "tool_test_runner",
+      "name": "Test Runner",
+      "description": "Run pytest, unittest, or other test frameworks"
+    },
+    {
+      "id": "tool_code_formatter",
+      "name": "Code Formatter",
+      "description": "Run black, ruff, or other code formatters"
+    },
+    {
+      "id": "tool_package_manager",
+      "name": "Package Manager",
+      "description": "Run pip install, npm install, or other package operations"
+    },
+    {
+      "id": "tool_http_client",
+      "name": "HTTP/API Client",
+      "description": "Make HTTP requests for API testing and integration (curl, requests, httpie)"
+    },
+    {
+      "id": "tool_archive_manager",
+      "name": "Archive Manager",
+      "description": "Create and extract archives (tar, gzip, zip) for baseline snapshots"
+    },
+    {
+      "id": "tool_pre_commit",
+      "name": "Pre-commit Manager",
+      "description": "Install and configure pre-commit hooks framework"
+    },
+    {
+      "id": "tool_secret_scanner",
+      "name": "Secret Scanner",
+      "description": "Scan for secrets and credentials (detect-secrets, truffleHog, gitleaks)"
+    },
+    {
+      "id": "tool_security_scanner",
+      "name": "Security Scanner",
+      "description": "Run security analysis tools (Bandit, safety, semgrep, SonarQube scanner)"
+    },
+    {
+      "id": "tool_json_editor",
+      "name": "JSON Editor",
+      "description": "Parse, validate, and modify JSON files (CMDB, configuration files)"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task_0_1",
+      "description": "Task 0.1: Verify Ollama Server - Test connectivity to ollama.blking.lan:11434, verify llama3.1:70b and mistral:7b models are available and responding.",
+      "expected_output": "Connectivity test results showing successful connection to Ollama server with both models responding to test prompts",
+      "agent": "agent_test_lab_engineer",
+      "context": []
+    },
+    {
+      "id": "task_0_2",
+      "description": "Task 0.2: Configure SonarQube Project - Create llm_osint project in SonarQube at sonarqube.blking.lan, configure quality gates, set up Python analysis rules.",
+      "expected_output": "SonarQube project configured with quality gates and ready for SAST integration",
+      "agent": "agent_cybersecurity_engineer",
+      "context": []
+    },
+    {
+      "id": "task_0_3",
+      "description": "Task 0.3: Set Up Git Pre-Commit Hooks - Install and configure pre-commit hooks for secret scanning (detect-secrets, truffleHog) and Bandit security linting.",
+      "expected_output": "Pre-commit hooks installed in .git/hooks/ and .pre-commit-config.yaml configured",
+      "agent": "agent_cybersecurity_engineer",
+      "context": [
+        "task_0_2"
+      ]
+    },
+    {
+      "id": "task_0_4",
+      "description": "Task 0.4: Create CMDB - Create initial Configuration Management Database at .claude/cmdb.json with project structure and baseline planning.",
+      "expected_output": ".claude/cmdb.json file with initial configuration items and baseline structure",
+      "agent": "agent_configuration_manager",
+      "context": []
+    },
+    {
+      "id": "task_0_5",
+      "description": "Task 0.5: Create Functional Baseline Tag - After Program Manager approval, create git tag v0.1.0-baseline-functional marking requirements and design approval.",
+      "expected_output": "Git tag v0.1.0-baseline-functional created with proper annotation and CMDB updated",
+      "agent": "agent_configuration_manager",
+      "context": [
+        "task_0_4"
+      ]
+    },
+    {
+      "id": "task_1_1_1_impl",
+      "description": "Task 1_1.1-Impl: Replace ChatOpenAI import with ChatOllama - In llm_osint/llm.py, replace 'from langchain.chat_models import ChatOpenAI' with 'from langchain_community.chat_models import ChatOllama'",
+      "expected_output": "llm.py line updated with ChatOllama import from langchain_community.chat_models",
+      "agent": "agent_python_coder",
+      "context": [
+        "task_0_5"
+      ]
+    },
+    {
+      "id": "task_1_1_1_alpha",
+      "description": "Task 1_1.1-Alpha: Test Replace ChatOpenAI import with ChatOllama (Independent Test 1) - Test Engineer Alpha: Run test independently: python -c 'from langchain_community.chat_models import ChatOllama'. Document exact command, output, and results.",
+      "expected_output": "Test report from Alpha with command 'python -c 'from langchain_community.chat_models import ChatOllama'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer",
+      "context": [
+        "task_1_1_1_impl"
+      ]
+    },
+    {
+      "id": "task_1_1_1_beta",
+      "description": "Task 1_1.1-Beta: Test Replace ChatOpenAI import with ChatOllama (Independent Test 2) - Test Engineer Beta: Run THE EXACT SAME test independently (without seeing Alpha's results): python -c 'from langchain_community.chat_models import ChatOllama'. Document exact command, output, and results.",
+      "expected_output": "Test report from Beta with command 'python -c 'from langchain_community.chat_models import ChatOllama'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer_beta",
+      "context": [
+        "task_1_1_1_impl"
+      ]
+    },
+    {
+      "id": "task_1_1_1_validate",
+      "description": "Task 1_1.1-Validate: Compare independent test results - Test Analyst: Review both Alpha and Beta test reports. Results must be IDENTICAL for test to be considered factual. If results differ, flag as test reliability issue.",
+      "expected_output": "Validation report with PASS (identical results) or FAIL (different results requiring investigation)",
+      "agent": "agent_test_analyst",
+      "context": [
+        "task_1_1_1_alpha",
+        "task_1_1_1_beta"
+      ]
+    },
+    {
+      "id": "task_1_1_1_review",
+      "description": "Task 1_1.1-Review: Team review implementation - Multi-agent team (Requirements Engineer, Architect, Cybersecurity Engineer): Review implementation of 'Replace ChatOpenAI import with ChatOllama', verify it meets FR-1.1, ensure code quality and security.",
+      "expected_output": "Team review report confirming implementation meets requirements FR-1.1",
+      "agent": "agent_requirements_engineer",
+      "context": [
+        "task_1_1_1_validate"
+      ]
+    },
+    {
+      "id": "task_1_1_2_impl",
+      "description": "Task 1_1.2-Impl: Remove unused ChatOpenAI import - In llm_osint/llm.py, remove 'from langchain.chat_models import ChatOpenAI' line if it still exists",
+      "expected_output": "llm.py with no ChatOpenAI import remaining",
+      "agent": "agent_python_coder",
+      "context": [
+        "task_0_5"
+      ]
+    },
+    {
+      "id": "task_1_1_2_alpha",
+      "description": "Task 1_1.2-Alpha: Test Remove unused ChatOpenAI import (Independent Test 1) - Test Engineer Alpha: Run test independently: grep -L 'ChatOpenAI' llm_osint/llm.py. Document exact command, output, and results.",
+      "expected_output": "Test report from Alpha with command 'grep -L 'ChatOpenAI' llm_osint/llm.py', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer",
+      "context": [
+        "task_1_1_2_impl"
+      ]
+    },
+    {
+      "id": "task_1_1_2_beta",
+      "description": "Task 1_1.2-Beta: Test Remove unused ChatOpenAI import (Independent Test 2) - Test Engineer Beta: Run THE EXACT SAME test independently (without seeing Alpha's results): grep -L 'ChatOpenAI' llm_osint/llm.py. Document exact command, output, and results.",
+      "expected_output": "Test report from Beta with command 'grep -L 'ChatOpenAI' llm_osint/llm.py', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer_beta",
+      "context": [
+        "task_1_1_2_impl"
+      ]
+    },
+    {
+      "id": "task_1_1_2_validate",
+      "description": "Task 1_1.2-Validate: Compare independent test results - Test Analyst: Review both Alpha and Beta test reports. Results must be IDENTICAL for test to be considered factual. If results differ, flag as test reliability issue.",
+      "expected_output": "Validation report with PASS (identical results) or FAIL (different results requiring investigation)",
+      "agent": "agent_test_analyst",
+      "context": [
+        "task_1_1_2_alpha",
+        "task_1_1_2_beta"
+      ]
+    },
+    {
+      "id": "task_1_1_2_review",
+      "description": "Task 1_1.2-Review: Team review implementation - Multi-agent team (Requirements Engineer, Architect, Cybersecurity Engineer): Review implementation of 'Remove unused ChatOpenAI import', verify it meets FR-1.1, ensure code quality and security.",
+      "expected_output": "Team review report confirming implementation meets requirements FR-1.1",
+      "agent": "agent_requirements_engineer",
+      "context": [
+        "task_1_1_2_validate"
+      ]
+    },
+    {
+      "id": "task_1_1_3_impl",
+      "description": "Task 1_1.3-Impl: Verify LLMModel type alias compatibility - In llm_osint/llm.py, verify that 'LLMModel = BaseChatModel' type alias still works with ChatOllama",
+      "expected_output": "Type alias LLMModel verified to work with ChatOllama, no type errors",
+      "agent": "agent_python_coder",
+      "context": [
+        "task_0_5"
+      ]
+    },
+    {
+      "id": "task_1_1_3_alpha",
+      "description": "Task 1_1.3-Alpha: Test Verify LLMModel type alias compatibility (Independent Test 1) - Test Engineer Alpha: Run test independently: python -c 'from llm_osint.llm import LLMModel; from langchain_community.chat_models import ChatOllama; assert issubclass(ChatOllama, LLMModel.__bound__)'. Document exact command, output, and results.",
+      "expected_output": "Test report from Alpha with command 'python -c 'from llm_osint.llm import LLMModel; from langchain_community.chat_models import ChatOllama; assert issubclass(ChatOllama, LLMModel.__bound__)'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer",
+      "context": [
+        "task_1_1_3_impl"
+      ]
+    },
+    {
+      "id": "task_1_1_3_beta",
+      "description": "Task 1_1.3-Beta: Test Verify LLMModel type alias compatibility (Independent Test 2) - Test Engineer Beta: Run THE EXACT SAME test independently (without seeing Alpha's results): python -c 'from llm_osint.llm import LLMModel; from langchain_community.chat_models import ChatOllama; assert issubclass(ChatOllama, LLMModel.__bound__)'. Document exact command, output, and results.",
+      "expected_output": "Test report from Beta with command 'python -c 'from llm_osint.llm import LLMModel; from langchain_community.chat_models import ChatOllama; assert issubclass(ChatOllama, LLMModel.__bound__)'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer_beta",
+      "context": [
+        "task_1_1_3_impl"
+      ]
+    },
+    {
+      "id": "task_1_1_3_validate",
+      "description": "Task 1_1.3-Validate: Compare independent test results - Test Analyst: Review both Alpha and Beta test reports. Results must be IDENTICAL for test to be considered factual. If results differ, flag as test reliability issue.",
+      "expected_output": "Validation report with PASS (identical results) or FAIL (different results requiring investigation)",
+      "agent": "agent_test_analyst",
+      "context": [
+        "task_1_1_3_alpha",
+        "task_1_1_3_beta"
+      ]
+    },
+    {
+      "id": "task_1_1_3_review",
+      "description": "Task 1_1.3-Review: Team review implementation - Multi-agent team (Requirements Engineer, Architect, Cybersecurity Engineer): Review implementation of 'Verify LLMModel type alias compatibility', verify it meets FR-1.5, ensure code quality and security.",
+      "expected_output": "Team review report confirming implementation meets requirements FR-1.5",
+      "agent": "agent_requirements_engineer",
+      "context": [
+        "task_1_1_3_validate"
+      ]
+    },
+    {
+      "id": "task_1_1_4_impl",
+      "description": "Task 1_1.4-Impl: Verify no syntax errors in llm.py - Run Python syntax check on llm_osint/llm.py",
+      "expected_output": "llm.py passes syntax check with no errors",
+      "agent": "agent_python_coder",
+      "context": [
+        "task_0_5"
+      ]
+    },
+    {
+      "id": "task_1_1_4_alpha",
+      "description": "Task 1_1.4-Alpha: Test Verify no syntax errors in llm.py (Independent Test 1) - Test Engineer Alpha: Run test independently: python -m py_compile llm_osint/llm.py. Document exact command, output, and results.",
+      "expected_output": "Test report from Alpha with command 'python -m py_compile llm_osint/llm.py', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer",
+      "context": [
+        "task_1_1_4_impl"
+      ]
+    },
+    {
+      "id": "task_1_1_4_beta",
+      "description": "Task 1_1.4-Beta: Test Verify no syntax errors in llm.py (Independent Test 2) - Test Engineer Beta: Run THE EXACT SAME test independently (without seeing Alpha's results): python -m py_compile llm_osint/llm.py. Document exact command, output, and results.",
+      "expected_output": "Test report from Beta with command 'python -m py_compile llm_osint/llm.py', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer_beta",
+      "context": [
+        "task_1_1_4_impl"
+      ]
+    },
+    {
+      "id": "task_1_1_4_validate",
+      "description": "Task 1_1.4-Validate: Compare independent test results - Test Analyst: Review both Alpha and Beta test reports. Results must be IDENTICAL for test to be considered factual. If results differ, flag as test reliability issue.",
+      "expected_output": "Validation report with PASS (identical results) or FAIL (different results requiring investigation)",
+      "agent": "agent_test_analyst",
+      "context": [
+        "task_1_1_4_alpha",
+        "task_1_1_4_beta"
+      ]
+    },
+    {
+      "id": "task_1_1_4_review",
+      "description": "Task 1_1.4-Review: Team review implementation - Multi-agent team (Requirements Engineer, Architect, Cybersecurity Engineer): Review implementation of 'Verify no syntax errors in llm.py', verify it meets FR-1.1, ensure code quality and security.",
+      "expected_output": "Team review report confirming implementation meets requirements FR-1.1",
+      "agent": "agent_requirements_engineer",
+      "context": [
+        "task_1_1_4_validate"
+      ]
+    },
+    {
+      "id": "task_1_2_1_impl",
+      "description": "Task 1_2.1-Impl: Add os import for environment variables - In llm_osint/llm.py, add 'import os' at the top of the file",
+      "expected_output": "llm.py has 'import os' statement",
+      "agent": "agent_python_coder",
+      "context": [
+        "task_1_1_4_review"
+      ]
+    },
+    {
+      "id": "task_1_2_1_alpha",
+      "description": "Task 1_2.1-Alpha: Test Add os import for environment variables (Independent Test 1) - Test Engineer Alpha: Run test independently: grep 'import os' llm_osint/llm.py. Document exact command, output, and results.",
+      "expected_output": "Test report from Alpha with command 'grep 'import os' llm_osint/llm.py', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer",
+      "context": [
+        "task_1_2_1_impl"
+      ]
+    },
+    {
+      "id": "task_1_2_1_beta",
+      "description": "Task 1_2.1-Beta: Test Add os import for environment variables (Independent Test 2) - Test Engineer Beta: Run THE EXACT SAME test independently (without seeing Alpha's results): grep 'import os' llm_osint/llm.py. Document exact command, output, and results.",
+      "expected_output": "Test report from Beta with command 'grep 'import os' llm_osint/llm.py', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer_beta",
+      "context": [
+        "task_1_2_1_impl"
+      ]
+    },
+    {
+      "id": "task_1_2_1_validate",
+      "description": "Task 1_2.1-Validate: Compare independent test results - Test Analyst: Review both Alpha and Beta test reports. Results must be IDENTICAL for test to be considered factual. If results differ, flag as test reliability issue.",
+      "expected_output": "Validation report with PASS (identical results) or FAIL (different results requiring investigation)",
+      "agent": "agent_test_analyst",
+      "context": [
+        "task_1_2_1_alpha",
+        "task_1_2_1_beta"
+      ]
+    },
+    {
+      "id": "task_1_2_1_review",
+      "description": "Task 1_2.1-Review: Team review implementation - Multi-agent team (Requirements Engineer, Architect, Cybersecurity Engineer): Review implementation of 'Add os import for environment variables', verify it meets FR-1.3, ensure code quality and security.",
+      "expected_output": "Team review report confirming implementation meets requirements FR-1.3",
+      "agent": "agent_requirements_engineer",
+      "context": [
+        "task_1_2_1_validate"
+      ]
+    },
+    {
+      "id": "task_1_2_2_impl",
+      "description": "Task 1_2.2-Impl: Define Ollama environment variable constants - In llm_osint/llm.py, define constants: OLLAMA_HOST = os.getenv('OLLAMA_HOST', 'ollama.blking.lan:11434'), OLLAMA_MAIN_MODEL = os.getenv('OLLAMA_MAIN_MODEL', 'llama3.1:70b'), OLLAMA_FAST_MODEL = os.getenv('OLLAMA_FAST_MODEL', 'mistral:7b')",
+      "expected_output": "Three Ollama constants defined with environment variable fallbacks",
+      "agent": "agent_python_coder",
+      "context": [
+        "task_0_5"
+      ]
+    },
+    {
+      "id": "task_1_2_2_alpha",
+      "description": "Task 1_2.2-Alpha: Test Define Ollama environment variable constants (Independent Test 1) - Test Engineer Alpha: Run test independently: python -c 'from llm_osint.llm import OLLAMA_HOST, OLLAMA_MAIN_MODEL, OLLAMA_FAST_MODEL; print(OLLAMA_HOST)'. Document exact command, output, and results.",
+      "expected_output": "Test report from Alpha with command 'python -c 'from llm_osint.llm import OLLAMA_HOST, OLLAMA_MAIN_MODEL, OLLAMA_FAST_MODEL; print(OLLAMA_HOST)'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer",
+      "context": [
+        "task_1_2_2_impl"
+      ]
+    },
+    {
+      "id": "task_1_2_2_beta",
+      "description": "Task 1_2.2-Beta: Test Define Ollama environment variable constants (Independent Test 2) - Test Engineer Beta: Run THE EXACT SAME test independently (without seeing Alpha's results): python -c 'from llm_osint.llm import OLLAMA_HOST, OLLAMA_MAIN_MODEL, OLLAMA_FAST_MODEL; print(OLLAMA_HOST)'. Document exact command, output, and results.",
+      "expected_output": "Test report from Beta with command 'python -c 'from llm_osint.llm import OLLAMA_HOST, OLLAMA_MAIN_MODEL, OLLAMA_FAST_MODEL; print(OLLAMA_HOST)'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer_beta",
+      "context": [
+        "task_1_2_2_impl"
+      ]
+    },
+    {
+      "id": "task_1_2_2_validate",
+      "description": "Task 1_2.2-Validate: Compare independent test results - Test Analyst: Review both Alpha and Beta test reports. Results must be IDENTICAL for test to be considered factual. If results differ, flag as test reliability issue.",
+      "expected_output": "Validation report with PASS (identical results) or FAIL (different results requiring investigation)",
+      "agent": "agent_test_analyst",
+      "context": [
+        "task_1_2_2_alpha",
+        "task_1_2_2_beta"
+      ]
+    },
+    {
+      "id": "task_1_2_2_review",
+      "description": "Task 1_2.2-Review: Team review implementation - Multi-agent team (Requirements Engineer, Architect, Cybersecurity Engineer): Review implementation of 'Define Ollama environment variable constants', verify it meets FR-1.3, FR-1.4, ensure code quality and security.",
+      "expected_output": "Team review report confirming implementation meets requirements FR-1.3, FR-1.4",
+      "agent": "agent_requirements_engineer",
+      "context": [
+        "task_1_2_2_validate"
+      ]
+    },
+    {
+      "id": "task_1_2_3_impl",
+      "description": "Task 1_2.3-Impl: Replace default_llm_options dict with Ollama configuration - In llm_osint/llm.py, update default_llm_options dict to use: model=OLLAMA_MAIN_MODEL, base_url=f'http://{OLLAMA_HOST}', temperature=0.7, request_timeout=120, num_predict=2048. Remove model_name and max_retries parameters.",
+      "expected_output": "default_llm_options dict configured for Ollama with 5 parameters",
+      "agent": "agent_python_coder",
+      "context": [
+        "task_0_5"
+      ]
+    },
+    {
+      "id": "task_1_2_3_alpha",
+      "description": "Task 1_2.3-Alpha: Test Replace default_llm_options dict with Ollama configuration (Independent Test 1) - Test Engineer Alpha: Run test independently: python -c 'from llm_osint.llm import default_llm_options; assert \"model\" in default_llm_options; assert \"base_url\" in default_llm_options'. Document exact command, output, and results.",
+      "expected_output": "Test report from Alpha with command 'python -c 'from llm_osint.llm import default_llm_options; assert \"model\" in default_llm_options; assert \"base_url\" in default_llm_options'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer",
+      "context": [
+        "task_1_2_3_impl"
+      ]
+    },
+    {
+      "id": "task_1_2_3_beta",
+      "description": "Task 1_2.3-Beta: Test Replace default_llm_options dict with Ollama configuration (Independent Test 2) - Test Engineer Beta: Run THE EXACT SAME test independently (without seeing Alpha's results): python -c 'from llm_osint.llm import default_llm_options; assert \"model\" in default_llm_options; assert \"base_url\" in default_llm_options'. Document exact command, output, and results.",
+      "expected_output": "Test report from Beta with command 'python -c 'from llm_osint.llm import default_llm_options; assert \"model\" in default_llm_options; assert \"base_url\" in default_llm_options'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer_beta",
+      "context": [
+        "task_1_2_3_impl"
+      ]
+    },
+    {
+      "id": "task_1_2_3_validate",
+      "description": "Task 1_2.3-Validate: Compare independent test results - Test Analyst: Review both Alpha and Beta test reports. Results must be IDENTICAL for test to be considered factual. If results differ, flag as test reliability issue.",
+      "expected_output": "Validation report with PASS (identical results) or FAIL (different results requiring investigation)",
+      "agent": "agent_test_analyst",
+      "context": [
+        "task_1_2_3_alpha",
+        "task_1_2_3_beta"
+      ]
+    },
+    {
+      "id": "task_1_2_3_review",
+      "description": "Task 1_2.3-Review: Team review implementation - Multi-agent team (Requirements Engineer, Architect, Cybersecurity Engineer): Review implementation of 'Replace default_llm_options dict with Ollama configuration', verify it meets FR-1.3, NFR-1, ensure code quality and security.",
+      "expected_output": "Team review report confirming implementation meets requirements FR-1.3, NFR-1",
+      "agent": "agent_requirements_engineer",
+      "context": [
+        "task_1_2_3_validate"
+      ]
+    },
+    {
+      "id": "task_1_2_4_impl",
+      "description": "Task 1_2.4-Impl: Replace default_fast_llm_options dict with Ollama configuration - In llm_osint/llm.py, update default_fast_llm_options dict to use: model=OLLAMA_FAST_MODEL, base_url=f'http://{OLLAMA_HOST}', temperature=0.7, request_timeout=120, num_predict=2048",
+      "expected_output": "default_fast_llm_options dict configured for Ollama fast model",
+      "agent": "agent_python_coder",
+      "context": [
+        "task_0_5"
+      ]
+    },
+    {
+      "id": "task_1_2_4_alpha",
+      "description": "Task 1_2.4-Alpha: Test Replace default_fast_llm_options dict with Ollama configuration (Independent Test 1) - Test Engineer Alpha: Run test independently: python -c 'from llm_osint.llm import default_fast_llm_options; assert \"model\" in default_fast_llm_options'. Document exact command, output, and results.",
+      "expected_output": "Test report from Alpha with command 'python -c 'from llm_osint.llm import default_fast_llm_options; assert \"model\" in default_fast_llm_options'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer",
+      "context": [
+        "task_1_2_4_impl"
+      ]
+    },
+    {
+      "id": "task_1_2_4_beta",
+      "description": "Task 1_2.4-Beta: Test Replace default_fast_llm_options dict with Ollama configuration (Independent Test 2) - Test Engineer Beta: Run THE EXACT SAME test independently (without seeing Alpha's results): python -c 'from llm_osint.llm import default_fast_llm_options; assert \"model\" in default_fast_llm_options'. Document exact command, output, and results.",
+      "expected_output": "Test report from Beta with command 'python -c 'from llm_osint.llm import default_fast_llm_options; assert \"model\" in default_fast_llm_options'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer_beta",
+      "context": [
+        "task_1_2_4_impl"
+      ]
+    },
+    {
+      "id": "task_1_2_4_validate",
+      "description": "Task 1_2.4-Validate: Compare independent test results - Test Analyst: Review both Alpha and Beta test reports. Results must be IDENTICAL for test to be considered factual. If results differ, flag as test reliability issue.",
+      "expected_output": "Validation report with PASS (identical results) or FAIL (different results requiring investigation)",
+      "agent": "agent_test_analyst",
+      "context": [
+        "task_1_2_4_alpha",
+        "task_1_2_4_beta"
+      ]
+    },
+    {
+      "id": "task_1_2_4_review",
+      "description": "Task 1_2.4-Review: Team review implementation - Multi-agent team (Requirements Engineer, Architect, Cybersecurity Engineer): Review implementation of 'Replace default_fast_llm_options dict with Ollama configuration', verify it meets FR-1.3, NFR-1, ensure code quality and security.",
+      "expected_output": "Team review report confirming implementation meets requirements FR-1.3, NFR-1",
+      "agent": "agent_requirements_engineer",
+      "context": [
+        "task_1_2_4_validate"
+      ]
+    },
+    {
+      "id": "task_1_3_1_impl",
+      "description": "Task 1_3.1-Impl: Update get_default_llm() to return ChatOllama - In llm_osint/llm.py, change get_default_llm() to return ChatOllama(**default_llm_options) instead of ChatOpenAI(**default_llm_options)",
+      "expected_output": "get_default_llm() returns ChatOllama instance with unchanged signature",
+      "agent": "agent_python_coder",
+      "context": [
+        "task_1_2_4_review"
+      ]
+    },
+    {
+      "id": "task_1_3_1_alpha",
+      "description": "Task 1_3.1-Alpha: Test Update get_default_llm() to return ChatOllama (Independent Test 1) - Test Engineer Alpha: Run test independently: python -c 'from llm_osint.llm import get_default_llm; llm = get_default_llm(); print(type(llm).__name__)'. Document exact command, output, and results.",
+      "expected_output": "Test report from Alpha with command 'python -c 'from llm_osint.llm import get_default_llm; llm = get_default_llm(); print(type(llm).__name__)'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer",
+      "context": [
+        "task_1_3_1_impl"
+      ]
+    },
+    {
+      "id": "task_1_3_1_beta",
+      "description": "Task 1_3.1-Beta: Test Update get_default_llm() to return ChatOllama (Independent Test 2) - Test Engineer Beta: Run THE EXACT SAME test independently (without seeing Alpha's results): python -c 'from llm_osint.llm import get_default_llm; llm = get_default_llm(); print(type(llm).__name__)'. Document exact command, output, and results.",
+      "expected_output": "Test report from Beta with command 'python -c 'from llm_osint.llm import get_default_llm; llm = get_default_llm(); print(type(llm).__name__)'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer_beta",
+      "context": [
+        "task_1_3_1_impl"
+      ]
+    },
+    {
+      "id": "task_1_3_1_validate",
+      "description": "Task 1_3.1-Validate: Compare independent test results - Test Analyst: Review both Alpha and Beta test reports. Results must be IDENTICAL for test to be considered factual. If results differ, flag as test reliability issue.",
+      "expected_output": "Validation report with PASS (identical results) or FAIL (different results requiring investigation)",
+      "agent": "agent_test_analyst",
+      "context": [
+        "task_1_3_1_alpha",
+        "task_1_3_1_beta"
+      ]
+    },
+    {
+      "id": "task_1_3_1_review",
+      "description": "Task 1_3.1-Review: Team review implementation - Multi-agent team (Requirements Engineer, Architect, Cybersecurity Engineer): Review implementation of 'Update get_default_llm() to return ChatOllama', verify it meets FR-1.6, ensure code quality and security.",
+      "expected_output": "Team review report confirming implementation meets requirements FR-1.6",
+      "agent": "agent_requirements_engineer",
+      "context": [
+        "task_1_3_1_validate"
+      ]
+    },
+    {
+      "id": "task_1_3_2_impl",
+      "description": "Task 1_3.2-Impl: Update get_default_fast_llm() to return ChatOllama - In llm_osint/llm.py, change get_default_fast_llm() to return ChatOllama(**default_fast_llm_options) instead of ChatOpenAI(**default_fast_llm_options)",
+      "expected_output": "get_default_fast_llm() returns ChatOllama instance with unchanged signature",
+      "agent": "agent_python_coder",
+      "context": [
+        "task_0_5"
+      ]
+    },
+    {
+      "id": "task_1_3_2_alpha",
+      "description": "Task 1_3.2-Alpha: Test Update get_default_fast_llm() to return ChatOllama (Independent Test 1) - Test Engineer Alpha: Run test independently: python -c 'from llm_osint.llm import get_default_fast_llm; llm = get_default_fast_llm(); print(type(llm).__name__)'. Document exact command, output, and results.",
+      "expected_output": "Test report from Alpha with command 'python -c 'from llm_osint.llm import get_default_fast_llm; llm = get_default_fast_llm(); print(type(llm).__name__)'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer",
+      "context": [
+        "task_1_3_2_impl"
+      ]
+    },
+    {
+      "id": "task_1_3_2_beta",
+      "description": "Task 1_3.2-Beta: Test Update get_default_fast_llm() to return ChatOllama (Independent Test 2) - Test Engineer Beta: Run THE EXACT SAME test independently (without seeing Alpha's results): python -c 'from llm_osint.llm import get_default_fast_llm; llm = get_default_fast_llm(); print(type(llm).__name__)'. Document exact command, output, and results.",
+      "expected_output": "Test report from Beta with command 'python -c 'from llm_osint.llm import get_default_fast_llm; llm = get_default_fast_llm(); print(type(llm).__name__)'', exact output, and pass/fail determination",
+      "agent": "agent_test_engineer_beta",
+      "context": [
+        "task_1_3_2_impl"
+      ]
+    },
+    {
+      "id": "task_1_3_2_validate",
+      "description": "Task 1_3.2-Validate: Compare independent test results - Test Analyst: Review both Alpha and Beta test reports. Results must be IDENTICAL for test to be considered factual. If results differ, flag as test reliability issue.",
+      "expected_output": "Validation report with PASS (identical results) or FAIL (different results requiring investigation)",
+      "agent": "agent_test_analyst",
+      "context": [
+        "task_1_3_2_alpha",
+        "task_1_3_2_beta"
+      ]
+    },
+    {
+      "id": "task_1_3_2_review",
+      "description": "Task 1_3.2-Review: Team review implementation - Multi-agent team (Requirements Engineer, Architect, Cybersecurity Engineer): Review implementation of 'Update get_default_fast_llm() to return ChatOllama', verify it meets FR-1.6, ensure code quality and security.",
+      "expected_output": "Team review report confirming implementation meets requirements FR-1.6",
+      "agent": "agent_requirements_engineer",
+      "context": [
+        "task_1_3_2_validate"
+      ]
+    },
+    {
+      "id": "task_post_1",
+      "description": "Post-Implementation 1: Create CHANGELOG.md - Document all changes, version history, and migration notes for v0.2.0 release.",
+      "expected_output": "CHANGELOG.md file with complete version history following Keep a Changelog format",
+      "agent": "agent_tech_writer",
+      "context": [
+        "task_1_3_2_review"
+      ]
+    },
+    {
+      "id": "task_post_2",
+      "description": "Post-Implementation 2: Create CM Automation Scripts - Create scripts/cm-status.sh, cm-baseline.sh, cm-rtm.sh, cm-audit.sh for configuration management automation.",
+      "expected_output": "Four CM automation scripts in scripts/ directory with execution permissions and documentation",
+      "agent": "agent_configuration_manager",
+      "context": [
+        "task_1_3_2_review"
+      ]
+    },
+    {
+      "id": "task_post_3",
+      "description": "Post-Implementation 3: Create Release Baseline Tag - Create git tag v0.2.0 for release baseline, create baseline archive, update CMDB with release metadata.",
+      "expected_output": "Git tag v0.2.0 created, baseline archive in .claude/baselines/, CMDB updated with release baseline",
+      "agent": "agent_configuration_manager",
+      "context": [
+        "task_post_1",
+        "task_post_2"
+      ]
+    },
+    {
+      "id": "task_security_review",
+      "description": "Security Review: Analyze migration for security implications - data privacy (local Ollama), API key management, prompt injection risks, ethical boundaries.",
+      "expected_output": "Security assessment with threat model and hardening recommendations",
+      "agent": "agent_cybersecurity_engineer",
+      "context": [
+        "task_post_3"
+      ]
+    },
+    {
+      "id": "task_final_review",
+      "description": "Final Review: Verify all tasks completed, all requirements met, all tests pass, documentation complete, security approved.",
+      "expected_output": "Final sign-off report with migration success confirmation and go-live approval",
+      "agent": "agent_program_manager",
+      "context": [
+        "task_security_review"
+      ]
+    }
+  ]
+}

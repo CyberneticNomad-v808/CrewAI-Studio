@@ -409,9 +409,28 @@ streamlit run app.py --server.headless true
         return json.dumps(crew_data, indent=2)
     
     def import_crew_from_json(self, crew_data):
+        # Legacy tool name mapping for backward compatibility
+        LEGACY_TOOL_NAMES = {
+            'Read File': 'FileReadTool',
+            'File Read': 'FileReadTool',
+            'Write File': 'CustomFileWriteTool',
+            'File Write': 'CustomFileWriteTool',
+            'Search Directory': 'DirectorySearchTool',
+            'Read Directory': 'DirectoryReadTool',
+            'CSV Search Tool Enhanced': 'CSVSearchTool',  # CSVSearchToolEnhanced was removed
+        }
+
         # Create tools
         for tool_data in crew_data['tools']:
-            tool_class = TOOL_CLASSES[tool_data['name']]
+            tool_name = tool_data['name']
+            # Map legacy names to current names
+            tool_name = LEGACY_TOOL_NAMES.get(tool_name, tool_name)
+
+            if tool_name not in TOOL_CLASSES:
+                st.warning(f"Tool '{tool_data['name']}' not found in TOOL_CLASSES. Skipping...")
+                continue
+
+            tool_class = TOOL_CLASSES[tool_name]
             tool = tool_class(tool_id=tool_data['tool_id'])
             tool.set_parameters(**tool_data['parameters'])
             if tool not in ss.tools:
